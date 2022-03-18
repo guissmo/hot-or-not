@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="Description" content="Enter your description here"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<title>Title</title>
+<style>
+
+    .container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-auto-flow: column;
+        background-color: green;
+    }
+
+    .card {
+        height: 100vh;
+        width: 50vw;
+        border-radius: 0;
+        border-width: 0;
+        background-color: white;
+        margin: 0;
+        padding: 5vw;
+    }
+
+    .card-1:before {
+        position: fixed;
+        left: 0;
+        right: 0;
+        z-index: 1;
+        display: block;
+        background-image: url('https://i.imgur.com/lL6tQfy.png');
+        width: 100vh;
+        height: 50vw;
+        -webkit-filter: blur(5px);
+        -moz-filter: blur(5px);
+        -o-filter: blur(5px);
+        -ms-filter: blur(5px);
+        filter: blur(5px);
+    }
+
+    .card-1 {
+        background: url("paris.jpg");
+        background-size: cover;
+
+        overflow: hidden;
+        margin: 0;
+        text-align: left;
+    }
+
+    @media screen and (orientation: portrait) {
+
+        .container {
+            grid-auto-flow: row;
+        }
+  
+        .card {
+            height: 50vh;
+            width: 100vw;
+            display: block; /* Stops it from floating */
+            float: none;
+        }
+    
+    }
+    
+.background-image {
+    position: fixed;
+    left: 50vw;
+    right: 0;
+    z-index: 1;
+    display: block;
+        height: 100vh;
+        width: 50vw;
+        border-radius: 0;
+        border-width: 0;
+        background-color: white;
+        margin: 0;
+        background: url("paris.jpg");
+        background-size: cover;
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+}
+
+.content {
+  position: fixed;
+  left: 50vw;
+  right: 0;
+  padding: 5vw;
+  z-index: 9999;
+}
+
+@media screen and (orientation: portrait) {
+
+.background-image {
+    left: 0vh;
+    top: 50vh;
+    width: 100vw;
+    height: 50vh;
+}
+
+.content {
+    left: 0vh;
+    top: 50vh;
+    width: 100vw;
+    height: 50vh;
+    display: block; /* Stops it from floating */
+    float: none;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+    <div class="background-image"></div>
+<div class="content">
+    <h1>Paris</h1>
+    <h1>8&#8451;</h1>
+    <h3>12:00 NN</h3>
+</div>
+
+<div class="container">
+    <div class="card card-1">
+        <h1>Paris</h1>
+        <h1>8&#8451;</h1>
+        <h3>12:00 NN</h3>
+    </div>
+    <div class="card">
+        Hello
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+</body>
+</html>

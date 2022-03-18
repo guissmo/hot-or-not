@@ -25,10 +25,183 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+    <style>
+
+      body {
+          font-family: 'Roboto', sans-serif;
+          font-weight: 900;
+      }
+  
+      .container {
+          width: 100vw;
+          margin: 0;
+          padding: 0;
+          display: grid;
+          grid-auto-flow: column;
+      }
+  
+      .card {
+          height: 100vh;
+          width: 50vw;
+          border-radius: 0;
+          border-width: 0;
+          background-color: transparent;
+          margin: 0;
+      }
+  
+      .card-rel {
+          position: relative;
+      }
+  
+      .card-abs {
+          position: absolute;
+      }
+  
+      .card-bg-1 {
+          background: url("paris.jpg");
+          background-size: cover;
+          background-position: center;
+          filter: sepia(40%) opacity(70%) hue-rotate(5deg);
+      }
+  
+      .card-bg-2 {
+          background: url("amsterdam.jpg");
+          background-size: cover;
+          background-position: center;
+          filter: sepia(40%) opacity(70%) hue-rotate(5deg);
+      }
+  
+      .card-content {
+          text-align: center;
+          padding-top: 20vh;
+          height: 80vh;
+          text-transform: uppercase;
+          color: white;
+      }
+  
+      .card-content .city-name {
+          display: inline-block;
+      }
+  
+      /* .city-name, h2, h3, h4, h5, h6 {
+          background-color: black;
+          color: white;
+      } */
+  
+      .city-name, .temp-display, h3 {
+          font-family: 'Roboto', sans-serif;
+          font-weight: 900;
+      }
+  
+      .city-name {
+          padding: 2vh 2vw 2vh 2vw;
+          border-radius: 4vw;
+          background-color: purple;
+      }
+      
+      h1 {
+          margin-bottom: 0;
+      }
+  
+      .city-name {
+          font-size: 3vw;
+      }
+  
+      h2 {
+          margin-top: 3vw;
+      }
+  
+      h3 {
+          margin-top: 3vw;
+          margin-bottom: 2vw;
+      }
+  
+      .temp-display {
+          padding: 2vh 5vh 2vh 5vh;
+          font-size: 8vw;
+          border-radius: 4vw;
+          background-color: green;
+          color: white;
+      }
+  
+      .answer-button {
+          padding: 2vh 2vw 2vh 2vw;
+          font-size: 4vw;
+          border-radius: 4vw;
+      }
+  
+      .answer-hot {
+          background-color: red;
+      }
+  
+      .answer-cold {
+          background-color: blue;
+      }
+  
+      @media screen and (orientation: portrait) {
+  
+          .container {
+              grid-auto-flow: row;
+          }
+  
+          .city-name {
+              font-size: 4vw;
+          }
+  
+          h2 {
+              margin-top: 1vw;
+          }
+          
+          h3 {
+              margin-top: 4vw;
+              margin-bottom: 6vw;
+          }
+  
+          .answer-button {
+              margin-top: 1vw;
+              padding: 2vw 2vh 2vw 2vh;
+              font-size: 6vw;
+              border-radius: 4vw;
+          }
+  
+          .temp-display, .answer-button {
+              position: relative;
+              left: 4vw;
+          }
+
+          .temp-display {
+            padding: 2vw 5vw 2vw 5vw;
+          }
+  
+          h3 {
+              font-size: 4vw;
+          }
+  
+          h2 {
+              font-size: 12vw;
+          }
+    
+          .card {
+              height: 50vh;
+              width: 100vw;
+              display: block; /* Stops it from floating */
+              float: none;
+          }
+
+          .card-content {
+              text-align: left;
+              padding-top: 4vh;
+              padding-left: 10vw;
+              height: 46vh;
+              width: 90vw;
+          }
+      
+      }
+    </style>
   </head>
-  <body>
+  <body id="body">
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <!-- <div id="container"></div> -->
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

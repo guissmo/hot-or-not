@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="Description" content="Enter your description here"/>
+<link href="https://fonts.googleapis.com/css2?family=Oxygen+Mono&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<title>Title</title>
+<style>
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 900;
+    }
+
+    .container {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-auto-flow: column;
+    }
+
+    .card {
+        height: 100vh;
+        width: 50vw;
+        border-radius: 0;
+        border-width: 0;
+        background-color: transparent;
+        margin: 0;
+    }
+
+    .card-rel {
+        position: relative;
+    }
+
+    .card-abs {
+        position: absolute;
+    }
+
+    .card-bg-1 {
+        background: url("paris.jpg");
+        background-size: cover;
+        background-position: center;
+        filter: sepia(40%) opacity(70%) hue-rotate(5deg);
+    }
+
+    .card-bg-2 {
+        background: url("amsterdam.jpg");
+        background-size: cover;
+        background-position: center;
+        filter: sepia(40%) opacity(70%) hue-rotate(5deg);
+    }
+
+    .card-content {
+        text-align: center;
+        padding-top: 20vh;
+        text-transform: uppercase;
+        color: white;
+    }
+
+    .card-content .city-name {
+        display: inline-block;
+    }
+
+    /* .city-name, h2, h3, h4, h5, h6 {
+        background-color: black;
+        color: white;
+    } */
+
+    .city-name, .temp-display, h3 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 900;
+    }
+
+    .city-name {
+        padding: 2vh 2vw 2vh 2vw;
+        border-radius: 4vw;
+        background-color: purple;
+    }
+    
+    h1 {
+        margin-bottom: 0;
+    }
+
+    .city-name {
+        font-size: 5vw;
+    }
+
+    h2 {
+        margin-top: 3vw;
+    }
+
+    h3 {
+        margin-top: 3vw;
+        margin-bottom: 2vw;
+    }
+
+    .temp-display {
+        padding: 2vh 5vw 2vh 5vw;
+        font-size: 8vw;
+        border-radius: 4vw;
+        background-color: green;
+        color: white;
+    }
+
+    .answer-button {
+        padding: 2vh 2vw 2vh 2vw;
+        font-size: 4vw;
+        border-radius: 4vw;
+    }
+
+    .answer-hot {
+        background-color: red;
+    }
+
+    .answer-cold {
+        background-color: blue;
+    }
+
+    @media screen and (orientation: portrait) {
+
+        .container {
+            grid-auto-flow: row;
+        }
+
+        .card-content {
+            text-align: left;
+            padding-top: 4vh;
+            padding-left: 10vw;
+        }
+
+        .city-name {
+            font-size: 8vw;
+        }
+
+        h2 {
+            margin-top: 1vw;
+        }
+        
+        h3 {
+            margin-top: 4vw;
+            margin-bottom: 6vw;
+        }
+
+        .answer-button {
+            margin-top: 1vw;
+            padding: 2vw 2vh 2vw 2vh;
+            font-size: 6vw;
+            border-radius: 4vw;
+        }
+
+        .temp-display, .answer-button {
+            position: relative;
+            left: 4vw;
+        }
+
+        h3 {
+            font-size: 4vw;
+        }
+
+        h2 {
+            font-size: 12vw;
+        }
+  
+        .card {
+            height: 50vh;
+            width: 100vw;
+            display: block; /* Stops it from floating */
+            float: none;
+        }
+    
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card card-rel">
+        <div class="card card-abs card-bg-1"></div>
+        <div class="card card-abs card-content">
+        <h1><span class="city-name">Paris</span></h1>
+        <h2><span class="temp-display">8&#8451;</span></h2>
+        <!-- <h3>12:00 NN</h3> -->
+        </div>
+    </div>
+    <div class="card card-rel">
+        <div class="card card-abs card-bg-2"></div>
+        <div class="card card-abs card-content">
+        <h1><span class="city-name">Amsterdam</span></h1>
+        <h3><span class="answer-button answer-hot"><i class="fa-solid fa-temperature-arrow-up"></i> HOTTER</span></h3>
+        <h3><span class="answer-button answer-cold"><i class="fa-solid fa-temperature-arrow-down"></i> COLDER</span></h3>
+        <!-- <h3>12:00 NN</h3> -->
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+</body>
+</html>
