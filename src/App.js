@@ -52,8 +52,8 @@ class BoxHotOrCold extends React.Component {
   render() {
     return(
       <span>
-      <h3><span class="answer-button answer-hot"><i class="fa-solid fa-temperature-arrow-up"></i> HOTTER</span></h3>
-      <h3><span class="answer-button answer-cold"><i class="fa-solid fa-temperature-arrow-down"></i> COLDER</span></h3>
+      <h3><span class="answer-button answer-hot" onClick={()=>this.props.triggerAnswer(1)}><i class="fa-solid fa-temperature-arrow-up"></i> HOTTER</span></h3>
+      <h3><span class="answer-button answer-cold" onClick={()=>this.props.triggerAnswer(-1)}><i class="fa-solid fa-temperature-arrow-down"></i> COLDER</span></h3>
       </span>
     )    
   }
@@ -76,12 +76,12 @@ class BoxTemperature extends React.Component {
     this.setState({
       temp: tempData.main.temp
     })
-    console.log(tempData)
+    this.props.updateHead(this.state.temp);
   }
 
   render() {
     if (this.state.temp == null) {
-      return( <h2><span class="temp-display">...</span></h2> )
+      return( <h2><span class="temp-display">???</span></h2> )
     }
     return(
       <h2><span class="temp-display">{Math.round(this.state.temp) + '\u00b0C'}</span></h2>
@@ -97,29 +97,35 @@ class Card extends React.Component {
       fullName: globalData._embedded['ua:item'][this.props.index].full_name,
       bg: "amsterdam.jpg",
       temp: 0,
+      answer: 0,
+      revealed: this.props.revealed
     }
+
     this.latlon = globalData._embedded['ua:item'][this.props.index].bounding_box.latlon;
     console.log(this.latlon);
     this.lat = (this.latlon['north'] + this.latlon['south'])/2;
     this.lon = (this.latlon['east'] + this.latlon['west'])/2;
     console.log(this.lat, this.lon)
-    this.fetchData();
+
+    this.BoxTemp = <BoxTemperature lat={this.lat} lon={this.lon} updateHead={this.props.updateHead}/>
   }
 
-  async fetchData() {
-
-    return;
+  triggerAnswer = (answer) => {
+    this.props.answered(answer)
+    this.setState({
+      revealed: true
+    })
   }
 
   render() {
 
-    if(this.props.revealed){
+    if(this.state.revealed){
       return (
         <div class="card card-rel">
           <CardBackground index={this.props.index}/>
           <div class="card card-abs card-content">
           <h1><span class="city-name">{this.state.fullName}</span></h1>
-          <BoxTemperature lat={this.lat} lon={this.lon}/>
+          { this.BoxTemp } 
           </div>
         </div>
       );
@@ -130,7 +136,7 @@ class Card extends React.Component {
         <CardBackground index={this.props.index}/>
         <div class="card card-abs card-content">
         <h1><span class="city-name">{this.state.fullName}</span></h1>
-        <BoxHotOrCold />
+        <BoxHotOrCold triggerAnswer={this.triggerAnswer}/>
         </div>
       </div>
     );
@@ -144,10 +150,33 @@ function App() {
 
   console.log("hit");
 
+  let ansArr = [];
+  let currentAnswer = 0;
+
+  let answerPush = (index, answer) => {
+    if(answer == null) return;
+    ansArr.push(answer);
+    if(index == 1){
+      console.log(ansArr)
+      if(ansArr[index] >= ansArr[index-1] && currentAnswer == 1){
+        console.log("CORRECT!")
+      }else if(ansArr[index] <= ansArr[index-1] && currentAnswer == -1){
+        console.log("CORRECT!")
+      }else{
+        console.log("WRONG!")
+      }
+    }
+    console.log(ansArr)
+  }
+
+  let answered = (answer) => {
+    currentAnswer = answer;
+  }
+
   return (
       <div class="container">
-      <Card index={n1} revealed={true} />
-      <Card index={n2} revealed={false} />
+      <Card index={n1} revealed={true} updateHead={(ans)=>answerPush(0,ans)} />
+      <Card index={n2} revealed={false} updateHead={(ans)=>answerPush(1,ans)} answered={answered}/>
       </div>
   );
 
