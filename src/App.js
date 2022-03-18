@@ -52,8 +52,8 @@ class BoxHotOrCold extends React.Component {
   render() {
     return(
       <span>
-      <h3><span class="answer-button answer-hot" onClick={()=>this.props.submitAnswer(1)}><i class="fa-solid fa-temperature-arrow-up"></i> HOTTER</span></h3>
-      <h3><span class="answer-button answer-cold" onClick={()=>this.props.submitAnswer(-1)}><i class="fa-solid fa-temperature-arrow-down"></i> COLDER</span></h3>
+      <h3><span class="answer-button answer-hot" onClick={()=>{this.props.submitAnswer(1)}}><i class="fa-solid fa-temperature-arrow-up"></i> HOTTER</span></h3>
+      <h3><span class="answer-button answer-cold" onClick={()=>{this.props.submitAnswer(-1)}}><i class="fa-solid fa-temperature-arrow-down"></i> COLDER</span></h3>
       {/* <h3><span class="answer-button answer-hot" onClick={()=>this.props.triggerAnswer(1)}><i class="fa-solid fa-temperature-arrow-up"></i> HOTTER</span></h3> */}
       {/* <h3><span class="answer-button answer-cold" onClick={()=>this.props.triggerAnswer(-1)}><i class="fa-solid fa-temperature-arrow-down"></i> COLDER</span></h3> */}
       </span>
@@ -76,8 +76,9 @@ class BoxSuspense extends React.Component {
     this.randomizer = null;
     this.speed = 50;
     this.state = {
-      display: 0
-    }
+      display: 0,
+      suspensing: true
+    };
     this.startRandomizer(300)
   }
 
@@ -92,8 +93,8 @@ class BoxSuspense extends React.Component {
       display: randomN
     })
     this.suspenseTime -= this.speed;
-    console.log(this.suspenseTime);
-    console.log(this.suspenseTime < 0);
+    // console.log(this.suspenseTime);
+    // console.log(this.suspenseTime < 0);
     if(this.suspenseTime < 0){
       clearInterval(this.randomizer);
       this.setState({
@@ -106,7 +107,7 @@ class BoxSuspense extends React.Component {
     return(
       <span>
       <h2><span class="temp-display">{this.state.display} {'\u00b0C'}</span></h2>
-      <button onClick={this.props.nextRound}>NEXT ROUND</button>
+      <button class="next-round-button" onClick={this.props.nextRound}>NEXT ROUND</button>
       </span>
     );
   }
@@ -137,24 +138,48 @@ class Card extends React.Component {
   }
 }
 
+class Overlay extends React.Component {
+  
+  render() {
+    return (
+      <div>
+      <div class="overlay"></div>
+      <div class="overlay-text">
+      <h2 class="end-game">SCORE: {this.props.score}</h2>
+      <h3 class="end-game">{this.props.message}</h3>
+      <span class="end-game-button">SHARE</span>
+      <span class="end-game-button" onClick={this.props.newGame}>NEW GAME</span>
+      </div>
+      </div>
+    );
+  }
+}
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      round: 0,
+      readyBlocks: 0,
+      gameEnd: false,
+      waitingForAnswer: true,
+      score: 0
+    };
     this.newGame()
   }
 
   newGame = () => {
 
-    this.state = {
+    this.blocks = []
+
+    this.setState({
       round: 0,
       readyBlocks: 0,
+      gameEnd: false,
       waitingForAnswer: true,
       score: 0
-    }
-
-    this.blocks = []
+    });
 
     this.newQuestion()
     this.newQuestion()
@@ -163,6 +188,9 @@ class App extends React.Component {
   }
 
   clickedAnswer = (arg) => {
+
+    console.log("clickkkkkkkkkkkkkkkk")
+
     this.setState({
       waitingForAnswer: false
     })
@@ -171,11 +199,11 @@ class App extends React.Component {
 
     let correct = false;
 
-    if(leftBlock.temp - rightBlock.temp >= 0 && arg == -1){
-      correct = true;
-    }
+    console.log(leftBlock.temp, rightBlock.temp)
 
-    if(rightBlock.temp - leftBlock.temp <= 0 && arg == 1){
+    console.log(leftBlock.temp - rightBlock.temp)
+
+    if( (leftBlock.temp - rightBlock.temp) * arg <= 0){
       correct = true;
     }
 
@@ -183,7 +211,14 @@ class App extends React.Component {
       this.setState({
         score: this.state.score + 1
       })
+    }else{
+      this.setState({
+        waitingForAnswer: false,
+        gameEnd: true
+      });
     }
+
+    return;
     
   }
 
@@ -218,6 +253,7 @@ class App extends React.Component {
       readyBlocks: this.blocks.length
     })
 
+    if( this.state === null ) return ;
     if( this.state.readyBlocks >= 2 && this.state.round < 2) this.advanceRound()
 
   }
@@ -226,7 +262,8 @@ class App extends React.Component {
     this.newQuestion()
     this.setState({
       round: this.state.round + 1,
-      waitingForAnswer: true
+      waitingForAnswer: true,
+      gameEnd: false
     })
   }
 
@@ -234,11 +271,22 @@ class App extends React.Component {
 
     const displayMe = [];
 
-    if(this.readyBlocks < 2) return (null);
+    // if(this.readyBlocks < 2) return (null);
+
+    // if(this.state === null) {
+    //   return("Loading... 1");
+    // }
+    if(this.state.round < 2 || this.state.readyBlocks < 2){
+      this.newQuestion();
+      return("Loading... ");
+    }
     
-    for(let i = Math.max(0, this.state.round-2); i < this.state.round; i++){
+    for(let i = this.state.round-2; i < this.state.round; i++){
       
-      if(this.blocks[i] === undefined) return (null);
+      if(this.blocks[i] === undefined) {
+        this.newQuestion();
+        return("Loading... 2");
+      }
 
       let lastCard = (i === this.state.round-1)
       let box = null;
@@ -246,7 +294,7 @@ class App extends React.Component {
         box = <BoxTemperature key={i+3000} temperature={this.blocks[i].temp} />
       }else{
         if(this.state.waitingForAnswer){
-          box = <BoxHotOrCold key={i+2000} submitAnswer={this.clickedAnswer} />
+          box = <BoxHotOrCold key={i+2000} submitAnswer={this.clickedAnswer.bind(this)} />
         }else{
           box = <BoxSuspense key={i+1000} temperature={this.blocks[i].temp} nextRound={this.advanceRound} />
         }
@@ -259,13 +307,21 @@ class App extends React.Component {
       />);
     }
 
+    let gameEndBox = "";
+    if (this.state.gameEnd) {
+      gameEndBox = <Overlay score={this.state.score} message="Game over!" newGame={this.newGame.bind(this)} />
+    }
+
+    console.log(displayMe, this.state)
+
     return(
       <div class="container">
         { displayMe }
-        <button onClick={this.advanceRound.bind(this)}>HAHA</button>
-        <button onClick={this.newQuestion}>HEHE</button>
-        <button onClick={this.newGame}>RESTART</button>
-        {this.blocks.length} {this.state.readyBlocks} {this.state.round} {this.state.score} 
+        { gameEndBox }
+        {/* <button onClick={this.advanceRound.bind(this)}>HAHA</button> */}
+        {/* <button onClick={this.newQuestion}>HEHE</button> */}
+        {/* <button onClick={this.newGame}>RESTART</button> */}
+        {/* {this.blocks.length} {this.state.readyBlocks} {this.state.round} {this.state.score}  */}
       </div>
     );
   }

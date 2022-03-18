@@ -24,6 +24,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen+Mono&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
     <title>React App</title>
     <style>
@@ -72,12 +73,31 @@
           filter: sepia(40%) opacity(70%) hue-rotate(5deg);
       }
   
+      .overlay {
+          position:absolute;
+          top:0;
+          left:0;
+          height:100vh;
+          width: 100vw;
+          background-color: rgb(0, 247, 255);
+          opacity: 0.8
+      }
+  
+      .overlay-text {
+          position:absolute;
+          top:10vh;
+          left:0;
+          height: 90vh;
+          width: 100vw;
+          text-align:center
+      }
+  
       .card-content {
           text-align: center;
-          padding-top: 20vh;
-          height: 80vh;
+          padding-top: 10vh;
           text-transform: uppercase;
           color: white;
+          height: 80vh;
       }
   
       .card-content .city-name {
@@ -88,6 +108,18 @@
           background-color: black;
           color: white;
       } */
+
+      .next-round-button {
+        position: absolute;
+        bottom: 5vh;
+        right: 5vw;
+        padding: 0;
+        margin: 0;
+        font-size: 5vw;
+        background-color: rgb(0, 105, 26);
+        color: white;
+        font-family: 'Roboto', sans-serif;
+      }
   
       .city-name, .temp-display, h3 {
           font-family: 'Roboto', sans-serif;
@@ -95,7 +127,7 @@
       }
   
       .city-name {
-          padding: 2vh 2vw 2vh 2vw;
+          padding: 1vh 1vw 1vh 1vw;
           border-radius: 4vw;
           background-color: purple;
       }
@@ -105,11 +137,11 @@
       }
   
       .city-name {
-          font-size: 3vw;
+          font-size: 5vw;
       }
   
       h2 {
-          margin-top: 3vw;
+          margin-top: 0vw;
       }
   
       h3 {
@@ -117,8 +149,16 @@
           margin-bottom: 2vw;
       }
   
+      h2.end-game {
+          margin-bottom: 0;
+      }
+  
+      h3.end-game {
+          margin-top: 0;
+      }
+  
       .temp-display {
-          padding: 2vh 5vh 2vh 5vh;
+          padding: 2vh 5vw 2vh 5vw;
           font-size: 8vw;
           border-radius: 4vw;
           background-color: green;
@@ -131,6 +171,19 @@
           border-radius: 4vw;
       }
   
+      .end-game-button {
+          padding: 2vh 2vw 2vh 2vw;
+          margin-top: 5vw;
+          font-size: 4vw;
+          margin-left: 5vw;
+          padding-bottom: -2vh;
+          width: 30vw;
+          border-radius: 4vw;
+          background-color: pink;
+          color: black;
+          opacity: 0.7
+      }
+  
       .answer-hot {
           background-color: red;
       }
@@ -139,10 +192,34 @@
           background-color: blue;
       }
   
+      h2 {
+          font-size: 12vw;
+          font-weight: 900;
+      }
+  
+      h3.end-game {
+          font-size: 3vw;
+      }
+  
       @media screen and (orientation: portrait) {
+  
+          .overlay-text {
+              position:absolute;
+              top:25vh;
+              left:0;
+              height: 75vh;
+              width: 100vw;
+              text-align:center
+          }
   
           .container {
               grid-auto-flow: row;
+          }
+  
+          .card-content {
+              text-align: left;
+              padding-top: 4vh;
+              padding-left: 10vw;
           }
   
           .city-name {
@@ -169,10 +246,6 @@
               position: relative;
               left: 4vw;
           }
-
-          .temp-display {
-            padding: 2vw 5vw 2vw 5vw;
-          }
   
           h3 {
               font-size: 4vw;
@@ -188,17 +261,9 @@
               display: block; /* Stops it from floating */
               float: none;
           }
-
-          .card-content {
-              text-align: left;
-              padding-top: 4vh;
-              padding-left: 10vw;
-              height: 46vh;
-              width: 90vw;
-          }
       
       }
-    </style>
+  </style>
   </head>
   <body id="body">
     <noscript>You need to enable JavaScript to run this app.</noscript>
