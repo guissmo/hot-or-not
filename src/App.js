@@ -11,175 +11,264 @@ function rand(n) {
 let n1 = rand(266);
 let n2 = rand(266);
 
-class CardBackground extends React.Component {
+// class CardBackground extends React.Component {
 
-  constructor(props){
-    super(props);
-    this.state = {
-      bg: null
-    }
-    this.fetchData()
-  }
+//   constructor(props){
+//     super(props);
+//     this.state = {
+//       bg: null
+//     }
+//     this.fetchData()
+//   }
 
-  fetchData = async() => {
-    let photoData = await fetch(globalData._embedded['ua:item'][this.props.index]._links['ua:images'].href)
-      .then((res) => res.json())
-      .then((data) => data)
-    this.setState({
-      bg: photoData.photos[0].image.web
-    });
-  }
+//   fetchData = async() => {
+//     let photoData = await fetch(globalData._embedded['ua:item'][this.props.index]._links['ua:images'].href)
+//       .then((res) => res.json())
+//       .then((data) => data)
+//     this.setState({
+//       bg: photoData.photos[0].image.web
+//     });
+//   }
 
-  render() {
-    if (this.state.bg == null) {
-      return(<div class="card card-abs" style={{
-        backgroundColor: 'red'
-      }}></div>)
-    }
-    return(
-      <div class="card card-abs" style = {{
-        backgroundImage: `url('${this.state.bg}')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        filter: "sepia(40%) opacity(70%)"
-      }}></div>
-    )
-  }
+//   render() {
+//     if (this.state.bg == null) {
+//       return(<div class="card card-abs" style={{
+//         backgroundColor: 'red'
+//       }}></div>)
+//     }
+//     return(
+//       <div class="card card-abs" style = {{
+//         backgroundImage: `url('${this.state.bg}')`,
+//         backgroundSize: "cover",
+//         backgroundPosition: "center",
+//         filter: "sepia(40%) opacity(70%)"
+//       }}></div>
+//     )
+//   }
 
-}
+// }
 
 class BoxHotOrCold extends React.Component {
   render() {
     return(
       <span>
-      <h3><span class="answer-button answer-hot" onClick={()=>this.props.triggerAnswer(1)}><i class="fa-solid fa-temperature-arrow-up"></i> HOTTER</span></h3>
-      <h3><span class="answer-button answer-cold" onClick={()=>this.props.triggerAnswer(-1)}><i class="fa-solid fa-temperature-arrow-down"></i> COLDER</span></h3>
+      <h3><span class="answer-button answer-hot" onClick={()=>this.props.submitAnswer(1)}><i class="fa-solid fa-temperature-arrow-up"></i> HOTTER</span></h3>
+      <h3><span class="answer-button answer-cold" onClick={()=>this.props.submitAnswer(-1)}><i class="fa-solid fa-temperature-arrow-down"></i> COLDER</span></h3>
+      {/* <h3><span class="answer-button answer-hot" onClick={()=>this.props.triggerAnswer(1)}><i class="fa-solid fa-temperature-arrow-up"></i> HOTTER</span></h3> */}
+      {/* <h3><span class="answer-button answer-cold" onClick={()=>this.props.triggerAnswer(-1)}><i class="fa-solid fa-temperature-arrow-down"></i> COLDER</span></h3> */}
       </span>
     )    
   }
 }
 
 class BoxTemperature extends React.Component {
+  render() {
+    return(
+      <h2><span class="temp-display">{this.props.temperature} {'\u00b0C'}</span></h2>
+    );
+  }
+}
+
+class BoxSuspense extends React.Component {
 
   constructor(props){
     super(props);
+    this.randomizer = null;
+    this.speed = 50;
     this.state = {
-      temp: null
+      display: 0
     }
-    this.fetchData()
+    this.startRandomizer(300)
   }
 
-  fetchData = async() => {
-    let tempData = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${this.props.lat}&lon=${this.props.lon}&appid=${APIKEY}&units=metric`)
-          .then((res) => res.json())
-          .then((data) => data)
+  startRandomizer(tim) {
+    this.suspenseTime = tim;
+    this.randomizer = setInterval(this.randomState.bind(this), this.speed);
+  }
+
+  randomState() {
+    let randomN = Math.floor(Math.random()*100);
     this.setState({
-      temp: tempData.main.temp
+      display: randomN
     })
-    this.props.updateHead(this.state.temp);
+    this.suspenseTime -= this.speed;
+    console.log(this.suspenseTime);
+    console.log(this.suspenseTime < 0);
+    if(this.suspenseTime < 0){
+      clearInterval(this.randomizer);
+      this.setState({
+        display: Math.round(this.props.temperature)
+      })
+    }
   }
 
   render() {
-    if (this.state.temp == null) {
-      return( <h2><span class="temp-display">???</span></h2> )
-    }
     return(
-      <h2><span class="temp-display">{Math.round(this.state.temp) + '\u00b0C'}</span></h2>
-    )
+      <span>
+      <h2><span class="temp-display">{this.state.display} {'\u00b0C'}</span></h2>
+      <button onClick={this.props.nextRound}>NEXT ROUND</button>
+      </span>
+    );
   }
+
 }
 
 class Card extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      fullName: globalData._embedded['ua:item'][this.props.index].full_name,
-      bg: "amsterdam.jpg",
-      temp: 0,
-      answer: 0,
-      revealed: this.props.revealed
-    }
-
-    this.latlon = globalData._embedded['ua:item'][this.props.index].bounding_box.latlon;
-    console.log(this.latlon);
-    this.lat = (this.latlon['north'] + this.latlon['south'])/2;
-    this.lon = (this.latlon['east'] + this.latlon['west'])/2;
-    console.log(this.lat, this.lon)
-
-    this.BoxTemp = <BoxTemperature lat={this.lat} lon={this.lon} updateHead={this.props.updateHead}/>
+  constructor(props){
+    super(props)
   }
 
-  triggerAnswer = (answer) => {
-    this.props.answered(answer)
+  render() {
+    return (
+      <div class="card card-rel">
+        <div class="card card-abs" style = {{
+          backgroundImage: `url('${this.props.photo}')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "sepia(40%) opacity(70%)"
+        }}></div>
+        <div class="card card-abs card-content">
+        <h1><span class="city-name">{this.props.fullName}</span></h1>
+        {this.props.box}
+        </div>
+      </div>
+    );
+  }
+}
+
+
+class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.newGame()
+  }
+
+  newGame = () => {
+
+    this.state = {
+      round: 0,
+      readyBlocks: 0,
+      waitingForAnswer: true,
+      score: 0
+    }
+
+    this.blocks = []
+
+    this.newQuestion()
+    this.newQuestion()
+    this.newQuestion()
+
+  }
+
+  clickedAnswer = (arg) => {
     this.setState({
-      revealed: true
+      waitingForAnswer: false
+    })
+    const leftBlock = this.blocks[this.state.round-2]
+    const rightBlock = this.blocks[this.state.round-1]
+
+    let correct = false;
+
+    if(leftBlock.temp - rightBlock.temp >= 0 && arg == -1){
+      correct = true;
+    }
+
+    if(rightBlock.temp - leftBlock.temp <= 0 && arg == 1){
+      correct = true;
+    }
+
+    if(correct){
+      this.setState({
+        score: this.state.score + 1
+      })
+    }
+    
+  }
+
+  newQuestion = async () => {
+    const n = Math.floor(Math.random()*266);
+    const fullName = globalData._embedded['ua:item'][n].full_name;
+    
+    const latlon = globalData._embedded['ua:item'][n].bounding_box.latlon;
+    const lat = (latlon['north'] + latlon['south'])/2;
+    const lon = (latlon['east'] + latlon['west'])/2;
+
+    const tempData = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKEY}&units=metric`)
+          .then((res) => res.json())
+          .then((data) => data)
+    const temp = Math.round(tempData.main.temp);
+
+    const photoData = await fetch(globalData._embedded['ua:item'][n]._links['ua:images'].href)
+      .then((res) => res.json())
+      .then((data) => data)
+    const photo = photoData.photos[0].image.web
+
+    this.blocks.push({
+      n: n,
+      fullName: fullName,
+      lat: lat,
+      lon: lon,
+      temp: temp,
+      photo: photo
+    })
+
+    this.setState({
+      readyBlocks: this.blocks.length
+    })
+
+    if( this.state.readyBlocks >= 2 && this.state.round < 2) this.advanceRound()
+
+  }
+
+  advanceRound = async (e) => {
+    this.newQuestion()
+    this.setState({
+      round: this.state.round + 1,
+      waitingForAnswer: true
     })
   }
 
   render() {
 
-    if(this.state.revealed){
-      return (
-        <div class="card card-rel">
-          <CardBackground index={this.props.index}/>
-          <div class="card card-abs card-content">
-          <h1><span class="city-name">{this.state.fullName}</span></h1>
-          { this.BoxTemp } 
-          </div>
-        </div>
-      );
+    const displayMe = [];
+
+    if(this.readyBlocks < 2) return (null);
+    
+    for(let i = Math.max(0, this.state.round-2); i < this.state.round; i++){
+      
+      if(this.blocks[i] === undefined) return (null);
+
+      let lastCard = (i === this.state.round-1)
+      let box = null;
+      if (!lastCard) {
+        box = <BoxTemperature key={i+3000} temperature={this.blocks[i].temp} />
+      }else{
+        if(this.state.waitingForAnswer){
+          box = <BoxHotOrCold key={i+2000} submitAnswer={this.clickedAnswer} />
+        }else{
+          box = <BoxSuspense key={i+1000} temperature={this.blocks[i].temp} nextRound={this.advanceRound} />
+        }
+      }
+      displayMe.push(
+      <Card key={i}
+            fullName={this.blocks[i].fullName}
+            photo={this.blocks[i].photo}
+            box={box}
+      />);
     }
 
-    return (
-      <div class="card card-rel">
-        <CardBackground index={this.props.index}/>
-        <div class="card card-abs card-content">
-        <h1><span class="city-name">{this.state.fullName}</span></h1>
-        <BoxHotOrCold triggerAnswer={this.triggerAnswer}/>
-        </div>
+    return(
+      <div class="container">
+        { displayMe }
+        <button onClick={this.advanceRound.bind(this)}>HAHA</button>
+        <button onClick={this.newQuestion}>HEHE</button>
+        <button onClick={this.newGame}>RESTART</button>
+        {this.blocks.length} {this.state.readyBlocks} {this.state.round} {this.state.score} 
       </div>
     );
-    
   }
-
-}
-
-
-function App() {
-
-  console.log("hit");
-
-  let ansArr = [];
-  let currentAnswer = 0;
-
-  let answerPush = (index, answer) => {
-    if(answer == null) return;
-    ansArr.push(answer);
-    if(index == 1){
-      console.log(ansArr)
-      if(ansArr[index] >= ansArr[index-1] && currentAnswer == 1){
-        console.log("CORRECT!")
-      }else if(ansArr[index] <= ansArr[index-1] && currentAnswer == -1){
-        console.log("CORRECT!")
-      }else{
-        console.log("WRONG!")
-      }
-    }
-    console.log(ansArr)
-  }
-
-  let answered = (answer) => {
-    currentAnswer = answer;
-  }
-
-  return (
-      <div class="container">
-      <Card index={n1} revealed={true} updateHead={(ans)=>answerPush(0,ans)} />
-      <Card index={n2} revealed={false} updateHead={(ans)=>answerPush(1,ans)} answered={answered}/>
-      </div>
-  );
-
 }
 
 export default App;
