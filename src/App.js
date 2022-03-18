@@ -11,72 +11,82 @@ function rand(n) {
 let n1 = rand(266);
 let n2 = rand(266);
 
-function PlaceCard(index) {
+class CardBackground extends React.Component {
 
-  let myIndex = index;
-
-  const [temp, setTemp] = useState({
-    data: "?"
-  });
-
-  const [city, setCity] = useState({
-    bg: "paris.jpg"
-  });
-
-  function getFullNameFromIndex() {
-    console.log("entered")
-    return(globalData._embedded['ua:item'][myIndex].full_name);
+  constructor(props){
+    super(props);
+    this.state = {
+      bg: null
+    }
+    this.fetchData()
   }
 
-  function getPhotoHrefFromIndex() {
-    return(globalData._embedded['ua:item'][myIndex]._links['ua:images'].href)
-  }
-
-  async function fetchTemp() {
-    // e.preventDefault();
-    let json = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=44.8378&lon=-0.594&appid=${APIKEY}&units=metric`)
-          .then((res) => res.json())
-          .then((data) => data)
-    setTemp({
-      data: json.main.temp
+  fetchData = async() => {
+    let photoData = await fetch(globalData._embedded['ua:item'][this.props.index]._links['ua:images'].href)
+      .then((res) => res.json())
+      .then((data) => data)
+    this.setState({
+      bg: photoData.photos[0].image.web
     });
   }
 
-  async function fetchCity(e) {
-    e.preventDefault()
-    alert("yo")
-    console.log(getPhotoHrefFromIndex(index));
-    let json = await fetch(getPhotoHrefFromIndex())
-          .then((res) => res.json())
-          .then((data) => data)
-    setCity({
-      bg: json.photos[0].image.web
-    });
-    // console.log(json)
-    console.log("hello", json.photos[0].image.web)
-    return;
+  render() {
+    if (this.state.bg == null) {
+      return(<div class="card card-abs" style={{
+        backgroundColor: 'red'
+      }}></div>)
+    }
+    return(
+      <div class="card card-abs" style = {{
+        backgroundImage: `url('${this.state.bg}')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        filter: "sepia(40%) opacity(70%)"
+      }}></div>
+    )
   }
 
-  // let fullName = [ getFullNameFromIndex() ];
-  fetchCity();
+}
 
+class BoxHotOrCold extends React.Component {
+  render() {
+    return(
+      <span>
+      <h3><span class="answer-button answer-hot"><i class="fa-solid fa-temperature-arrow-up"></i> HOTTER</span></h3>
+      <h3><span class="answer-button answer-cold"><i class="fa-solid fa-temperature-arrow-down"></i> COLDER</span></h3>
+      </span>
+    )    
+  }
+}
 
-  return (
-    <div class="card card-rel">
-        <div class="card card-abs" style = {{
-          backgroundImage: `url('${city.bg}')`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          filter: "sepia(40%) opacity(70%)"
-        }}></div>
-        <div class="card card-abs card-content">
-        <h1><span class="city-name">{"aa"}</span></h1>
-        <h2><span class="temp-display">{temp.data == "?" ? "?" : temp.data + '\u00b0C'} </span></h2>
-        {/* <button onClick={fetchTemp}></button> */}
-        <button onClick={fetchCity}></button>
-        </div>
-    </div>
-  );
+class BoxTemperature extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      temp: null
+    }
+    this.fetchData()
+  }
+
+  fetchData = async() => {
+    let tempData = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${this.props.lat}&lon=${this.props.lon}&appid=${APIKEY}&units=metric`)
+          .then((res) => res.json())
+          .then((data) => data)
+    this.setState({
+      temp: tempData.main.temp
+    })
+    console.log(tempData)
+  }
+
+  render() {
+    if (this.state.temp == null) {
+      return( <h2><span class="temp-display">...</span></h2> )
+    }
+    return(
+      <h2><span class="temp-display">{Math.round(this.state.temp) + '\u00b0C'}</span></h2>
+    )
+  }
 }
 
 class Card extends React.Component {
@@ -97,37 +107,34 @@ class Card extends React.Component {
   }
 
   async fetchData() {
-    let photoData = await fetch(globalData._embedded['ua:item'][this.props.index]._links['ua:images'].href)
-          .then((res) => res.json())
-          .then((data) => data)
-    let tempData = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=44.8378&lon=-0.594&appid=${APIKEY}&units=metric`)
-          .then((res) => res.json())
-          .then((data) => data)
-    this.setState({
-      bg: photoData.photos[0].image.web,
-      temp: tempData.main.temp
-    })
+
     return;
   }
 
   render() {
+
+    if(this.props.revealed){
+      return (
+        <div class="card card-rel">
+          <CardBackground index={this.props.index}/>
+          <div class="card card-abs card-content">
+          <h1><span class="city-name">{this.state.fullName}</span></h1>
+          <BoxTemperature lat={this.lat} lon={this.lon}/>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div class="card card-rel">
-        <div class="card card-abs" style = {{
-          backgroundImage: `url('${this.state.bg}')`,
-          backgroundSize: "cover",
-          backgroundPosition: "left",
-          filter: "sepia(40%) opacity(70%)"
-        }}></div>
+        <CardBackground index={this.props.index}/>
         <div class="card card-abs card-content">
         <h1><span class="city-name">{this.state.fullName}</span></h1>
-        <h2><span class="temp-display">{this.state.temp}</span></h2>
-        {/* {temp.data == "?" ? "?" : temp.data + '\u00b0C'} */}
-        {/* <button onClick={fetchTemp}></button> */}
-        {/* <button onClick={fetchCity}></button> */}
+        <BoxHotOrCold />
         </div>
       </div>
     );
+    
   }
 
 }
@@ -135,17 +142,12 @@ class Card extends React.Component {
 
 function App() {
 
-  // console.log(globalData);
-  // console.log(globalData._embedded['ua:item'][rand].full_name);
-  // console.log(globalData._embedded['ua:item'][rand]._links['ua:images'].href);
-
-  // let [cardOne, cardTwo] = [PlaceCard(n1), PlaceCard(n2)];
-
   console.log("hit");
 
   return (
       <div class="container">
-      <Card index={n1} />
+      <Card index={n1} revealed={true} />
+      <Card index={n2} revealed={false} />
       </div>
   );
 
