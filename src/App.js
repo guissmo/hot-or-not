@@ -158,7 +158,7 @@ class App extends React.Component {
   shareGame = (btn) => {
     
     let ret = "";
-    ret += `Hot or Not:\nWhich city is currently hotter?\n`;  
+    ret += `Hot or Not:\nCan you decide which of the two is hotter?\n`;  
     ret += `I got ${this.state.score} points!\n`
     ret += `https://hotornot.guissmo.com`;
     navigator.clipboard.writeText(ret);
