@@ -1,64 +1,163 @@
-    body {
-        font-family: 'Roboto', sans-serif;
-        font-weight: 900;
-    }
+body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 900;
+    overflow: hidden;
+}
 
-    .container {
-        width: 100vw;
-        margin: 0;
-        padding: 0;
-        display: grid;
-        grid-auto-flow: column;
-    }
+.app-container, .container {
+    width: 100vw;
+    font-size: 0;
+}
+
+.card {
+    display: inline-block;
+    height: 100vh;
+    width: 50vw;
+    line-height: 1;
+}
+
+.card-rel {
+    position: relative;
+}
+
+.card-abs {
+    position: absolute;
+}
+
+.card-content {
+    text-align: center;
+    padding-top: 10vh;
+    text-transform: uppercase;
+    color: white;
+    height: 80vh;
+}
+
+.city-name {
+    font-weight: 900;
+    font-size: calc(12px + 2vw);
+    max-width: 25vw;
+    padding: 1vh 1vw 1vh 1vw;
+    border-radius: 4vw;
+    background-color: #3C153B;
+}
+
+.temp-display-wrapper {
+    display: block;
+    padding: 0;
+    margin: 0;
+    padding-top: calc(12px + 1vh);
+    padding-bottom: calc(12px + 1vh);
+}
+
+.temp-display {
+    display: inline-block;
+    padding: 2vh 5vw 2vh 5vw;
+    width: 25vw;
+    max-width: 25vw;
+    font-size: 8vw;
+    border-radius: 4vw;
+    background-color: #89BD9E;
+    color: #2C4E3A;
+    border-style: solid;
+    border-color: #2C4E3A;
+    border-width: 5px;
+}
+
+.answer-button-wrapper {
+    display: block;
+    margin: 5vh;
+    margin-top: 4vw;
+    line-height: 10vh;
+}
+
+.answer-button {
+    font-size: calc(12px + 8vh);
+    padding: 2vh 2vh 2vh 2vh;
+    border-radius: 4vw;
+    cursor: pointer;
+}
+
+.answer-hot {
+    background-color: #EF233C;
+}
+
+.answer-cold {
+    background-color: #00A6ED;
+}
+
+.next-round-button {
+    padding: 0;
+    margin: 0;
+    padding-top: 10px;
+    background-color: #14FFF7;
+    color: #2C4E3A;
+    font-family: 'Roboto', sans-serif;
+    font-size: calc(12px + 8vh);
+    padding: 2vh 2vh 2vh 2vh;
+    border-radius: 4vw;
+    cursor: pointer;
+    line-height: 10vw;
+}
+
+.overlay {
+    position:absolute;
+    top:0;
+    left:0;
+    height:100vh;
+    width: 100vw;
+    background-color: #EF233C;
+    opacity: 0.8
+}
+
+.overlay-text {
+    position:absolute;
+    top:10vh;
+    left:0;
+    height: 90vh;
+    width: 100vw;
+    text-align:center;
+    font-size:4vw;
+}
+
+.end-game-button {
+    font-size: calc(12px + 8vh);
+    padding: 2vh 2vh 2vh 2vh;
+    border-radius: 4vw;
+    background-color: #14FFF7;
+    color: #2C4E3A;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 900px) {
 
     .card {
-        height: 100vh;
-        width: 50vw;
-        border-radius: 0;
-        border-width: 0;
-        background-color: transparent;
-        margin: 0;
-    }
-
-    .card-rel {
-        position: relative;
-    }
-
-    .card-abs {
-        position: absolute;
-    }
-
-    .card-bg-1 {
-        background: url("paris.jpg");
-        background-size: cover;
-        background-position: center;
-        filter: sepia(40%) opacity(70%) hue-rotate(5deg);
-    }
-
-    .card-bg-2 {
-        background: url("amsterdam.jpg");
-        background-size: cover;
-        background-position: center;
-        filter: sepia(40%) opacity(70%) hue-rotate(5deg);
-    }
-
-    .overlay {
-        position:absolute;
-        top:0;
-        left:0;
-        height:100vh;
+        height: 50vh;
         width: 100vw;
-        background-color: rgb(0, 247, 255);
-        opacity: 0.8
     }
 
-    .overlay-text {
-        position:absolute;
-        top:10vh;
-        left:0;
-        height: 90vh;
-        width: 100vw;
-        text-align:center
+    .city-name {
+        font-size: calc(12px + 2vh);
+        max-width: 80vw;
+    }
+
+    .answer-buttons-wrapper {
+        display: block;
+        direction: rtl;
+    }
+
+    .answer-button-wrapper {
+        display: inline-block;
+        margin-top: calc(12px)!important;
+        margin-bottom: calc(12px)!important;
+        line-height: unset;
+    }
+
+    .answer-button {
+        display:block;
+        font-size: calc(12px + 2vh);
     }
 
     .card-content {
@@ -68,167 +167,53 @@
         color: white;
         height: 80vh;
     }
+    
+    .next-round-button {
+        margin-top: 50px;
+        padding: 0;
+        margin: 0;
+        background-color: #14FFF7;
+        color: #2C4E3A;
+        font-family: 'Roboto', sans-serif;
+        font-size: calc(12px + 2vh);
+        padding: 2vh 2vh 2vh 2vh;
+        border-radius: 4vw;
+        cursor: pointer;
+    }
 
-    .card-content .city-name {
+    .app-span {
+        line-height: 0;
+        display: block;
+    }
+    
+    .end-game-button {
+        font-size: calc(12px + 4vw);
+        padding: 2vh 2vh 2vh 2vh;
+        border-radius: 4vw;
+        background-color: #00A6ED;
+        margin-left: 1vw;
+        margin-right: 1vw;
+        cursor: pointer;
         display: inline-block;
     }
 
-    /* .city-name, h2, h3, h4, h5, h6 {
-        background-color: black;
-        color: white;
-    } */
-
-    .next-round-button {
-      position: absolute;
-      bottom: 5vh;
-      right: 5vw;
-      padding: 0;
-      margin: 0;
-      font-size: 5vw;
-      background-color: rgb(0, 105, 26);
-      color: white;
-      font-family: 'Roboto', sans-serif;
+    .overlay-text {
+        margin-top: 15vh;
+        line-height: 1.5;
+        font-size: 4vh;
     }
 
-    .city-name, .temp-display, h3 {
-        font-family: 'Roboto', sans-serif;
-        font-weight: 900;
+    .end-game-button{
+        margin-top: 10px;
     }
 
-    .city-name {
-        padding: 1vh 1vw 1vh 1vw;
-        border-radius: 4vw;
-        background-color: purple;
-    }
-    
-    h1 {
-        margin-bottom: 0;
+    .end-game-buttons-wrapper {
+        margin-top: 5px;
     }
 
-    .city-name {
-        font-size: 5vw;
-    }
+}
 
-    h2 {
-        margin-top: 0vw;
-    }
 
-    h3 {
-        margin-top: 3vw;
-        margin-bottom: 2vw;
-    }
-
-    h2.end-game {
-        margin-bottom: 0;
-    }
-
-    h3.end-game {
-        margin-top: 0;
-    }
-
-    .temp-display {
-        padding: 2vh 5vw 2vh 5vw;
-        font-size: 8vw;
-        border-radius: 4vw;
-        background-color: green;
-        color: white;
-    }
-
-    .answer-button {
-        padding: 2vh 2vw 2vh 2vw;
-        font-size: 4vw;
-        border-radius: 4vw;
-    }
-
-    .end-game-button {
-        padding: 2vh 2vw 2vh 2vw;
-        margin-top: 5vw;
-        font-size: 4vw;
-        margin-left: 5vw;
-        padding-bottom: -2vh;
-        width: 30vw;
-        border-radius: 4vw;
-        background-color: pink;
-        color: black;
-        opacity: 0.7
-    }
-
-    .answer-hot {
-        background-color: red;
-    }
-
-    .answer-cold {
-        background-color: blue;
-    }
-
-    h2 {
-        font-size: 12vw;
-        font-weight: 900;
-    }
-
-    h3.end-game {
-        font-size: 3vw;
-    }
-
-    @media screen and (orientation: portrait) {
-
-        .overlay-text {
-            position:absolute;
-            top:25vh;
-            left:0;
-            height: 75vh;
-            width: 100vw;
-            text-align:center
-        }
-
-        .container {
-            grid-auto-flow: row;
-        }
-
-        .card-content {
-            text-align: left;
-            padding-top: 4vh;
-            padding-left: 10vw;
-        }
-
-        .city-name {
-            font-size: 4vw;
-        }
-
-        h2 {
-            margin-top: 1vw;
-        }
-        
-        h3 {
-            margin-top: 4vw;
-            margin-bottom: 6vw;
-        }
-
-        .answer-button {
-            margin-top: 1vw;
-            padding: 2vw 2vh 2vw 2vh;
-            font-size: 6vw;
-            border-radius: 4vw;
-        }
-
-        .temp-display, .answer-button {
-            position: relative;
-            left: 4vw;
-        }
-
-        h3 {
-            font-size: 4vw;
-        }
-
-        h2 {
-            font-size: 12vw;
-        }
-  
-        .card {
-            height: 50vh;
-            width: 100vw;
-            display: block; /* Stops it from floating */
-            float: none;
-        }
-    
+    .card-content .city-name {
+        display: inline-block;
     }
