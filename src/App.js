@@ -1,52 +1,6 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import globalData from './data-teleport.json';
-
-const APIKEY = "e3f861e3c4842bb6e2479e930fd8e5b4";
-
-function rand(n) {
-  return(Math.floor(Math.random()*n));
-}
-
-let n1 = rand(266);
-let n2 = rand(266);
-
-// class CardBackground extends React.Component {
-
-//   constructor(props){
-//     super(props);
-//     this.state = {
-//       bg: null
-//     }
-//     this.fetchData()
-//   }
-
-//   fetchData = async() => {
-//     let photoData = await fetch(globalData._embedded['ua:item'][this.props.index]._links['ua:images'].href)
-//       .then((res) => res.json())
-//       .then((data) => data)
-//     this.setState({
-//       bg: photoData.photos[0].image.web
-//     });
-//   }
-
-//   render() {
-//     if (this.state.bg == null) {
-//       return(<div class="card card-abs" style={{
-//         backgroundColor: 'red'
-//       }}></div>)
-//     }
-//     return(
-//       <div class="card card-abs" style = {{
-//         backgroundImage: `url('${this.state.bg}')`,
-//         backgroundSize: "cover",
-//         backgroundPosition: "center",
-//         filter: "sepia(40%) opacity(70%)"
-//       }}></div>
-//     )
-//   }
-
-// }
+import APIKEY from './apikey.json';
 
 class BoxHotOrCold extends React.Component {
   render() {
@@ -142,6 +96,13 @@ class Card extends React.Component {
 }
 
 class Overlay extends React.Component {
+
+  constructor(props){
+    super(props)
+    this.state = {
+      shareMessage: 'SHARE'
+    }
+  }
   
   render() {
     return (
@@ -149,9 +110,9 @@ class Overlay extends React.Component {
       <div className="overlay"></div>
       <div className="overlay-text">
       <h2 className="end-game">SCORE: {this.props.score}</h2>
-      <h3 className="end-game">{this.props.message}</h3>
+      {/* <h3 className="end-game">{this.props.message}</h3> */}
       <span className="end-game-buttons-wrapper">
-      <span className="end-game-button">SHARE</span>
+      <span className="end-game-button " onClick={()=>this.props.shareGame(this)}>{this.state.shareMessage}</span>
       <span className="end-game-button" onClick={this.props.newGame}>NEW GAME</span>
       </span>
       </div>
@@ -191,6 +152,20 @@ class App extends React.Component {
     this.newQuestion()
     this.newQuestion()
     this.newQuestion()
+
+  }
+
+  shareGame = (btn) => {
+    
+    let ret = "";
+    ret += `Hot or Not:\nWhich city is currently hotter?\n`;  
+    ret += `I got ${this.state.score} points!\n`
+    ret += `https://hotornot.guissmo.com`;
+    navigator.clipboard.writeText(ret);
+    btn.setState({
+      shareMessage: "COPIED!"
+    });
+    console.log(btn.state)
 
   }
 
@@ -328,7 +303,7 @@ class App extends React.Component {
 
     let gameEndBox = "";
     if (this.state.gameEnd && !this.state.suspensing) {
-      gameEndBox = <Overlay score={this.state.score} message="Game over!" newGame={this.newGame.bind(this)} />
+      gameEndBox = <Overlay score={this.state.score} message="Game over!" newGame={this.newGame.bind(this)} shareGame={this.shareGame} />
     }
 
     console.log(displayMe, this.state)
