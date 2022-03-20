@@ -73,10 +73,6 @@ class BoxSuspense extends React.Component {
 
 class Card extends React.Component {
 
-  constructor(props){
-    super(props)
-  }
-
   render() {
     return (
       <div class="card card-rel">
@@ -110,9 +106,15 @@ class Overlay extends React.Component {
       <div className="overlay"></div>
       <div className="overlay-text">
       <h2 className="end-game">SCORE: {this.props.score}</h2>
-      {/* <h3 className="end-game">{this.props.message}</h3> */}
+      <p>I am looking for a job.</p>
+      <p>
+      <a href="https://guissmo.com" target="_blank" rel="noreferrer">Website</a> |
+      <a href="https://github.com/guissmo" target="_blank" rel="noreferrer">Github</a> |
+      <a href="https://linkedin.com/in/guissmo" target="_blank" rel="noreferrer">LinkedIn</a> |
+      <a href="mailto:jared@guissmo.com" target="_blank" rel="noreferrer">Email</a>
+      </p>
+      <p>&nbsp;</p>
       <span className="end-game-buttons-wrapper">
-      (I'm looking for a job. <a href="https://guissmo.com">Website</a> | <a href="https://linkedin.com/in/guissmo">LinkedIn</a> | <a href="https://github.com/guissmo">Github</a>)
       <span className="end-game-button " onClick={()=>this.props.shareGame(this)}>{this.state.shareMessage}</span>
       <span className="end-game-button" onClick={this.props.newGame}>NEW GAME</span>
       </span>
